@@ -2,9 +2,6 @@
 insert into USERS (id, password, name)
 values ('test2', 'test123', '테스트유저2');
 
-insert into ISSUE (user_id, title, comment, created_at)
-VALUES ('test2', '제목', '내용', '2024-05-08-00:00:00');
-
 /* MILESTONE */
 insert into MILESTONE (name, description, deadline)
 VALUES ('feat_1', '피쳐원', '2024-05-18 00:00:00');
@@ -48,7 +45,7 @@ VALUES ('todo', '오늘 할 일',  '#C3FF93'),
 
 
 /* ISSUE_LABEL */
-insert into ISSUE_LABEL (issue_id, label_id)
+insert into ISSUE_HAS_LABEL (issue_id, label_id)
 VALUES (1, 1),
        (1, 2),
        (2, 1),

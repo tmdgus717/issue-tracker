@@ -1,4 +1,4 @@
-drop table if exists ISSUE_HAS_ASSIGNEE, ISSUE_HAS_LABEL, USER_LIKES_COMMENT, COMMENT_FILE, COMMENT, ASSIGNEE, ISSUE, LABEL, MILESTONE, USERS;
+drop table if exists ISSUE_HAS_ASSIGNEE, ISSUE_HAS_LABEL, USER_LIKES_COMMENT, COMMENT_FILE, COMMENT, ISSUE, LABEL, MILESTONE, USERS;
 
 create table USERS
 (
@@ -41,20 +41,12 @@ create table ISSUE
     foreign key (milestone_id) references MILESTONE (id)
 );
 
-create table ASSIGNEE
-(
-    id       bigint auto_increment primary key,
-    issue_id bigint,
-    user_id  varchar(255),
-    foreign key (issue_id) references ISSUE (id),
-    foreign key (user_id) references USERS (id)
-);
-
 create table COMMENT
 (
     id               bigint auto_increment primary key,
     issue_id         bigint,
     user_id          varchar(255),
+    content          text,
     last_modified_at timestamp default current_timestamp,
     created_at       timestamp default current_timestamp,
     foreign key (issue_id) references ISSUE (id),
@@ -92,8 +84,8 @@ create table ISSUE_HAS_ASSIGNEE
 (
     id          bigint auto_increment primary key,
     issue_id    bigint,
-    assignee_id bigint,
+    assignee_id varchar(255),
     foreign key (issue_id) references ISSUE (id),
-    foreign key (assignee_id) references ASSIGNEE (id),
+    foreign key (assignee_id) references USERS (id),
     unique (issue_id, assignee_id)
 );
