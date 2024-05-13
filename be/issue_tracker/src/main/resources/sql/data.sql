@@ -1,15 +1,19 @@
 /* USERS */
 insert into USERS (id, password, name)
-values ('test2', 'test123', '테스트유저2');
+values ('test1', 'test123', '테스트유저1'),
+       ('test2', 'test123', '테스트유저2'),
+       ('test3', 'test123', '테스트유저3');
 
 /* MILESTONE */
 insert into MILESTONE (name, description, deadline)
-VALUES ('feat_1', '피쳐원', '2024-05-18 00:00:00');
+VALUES ('feat_1', '피쳐원', '2024-05-18 00:00:00'),
+       ('feat_2', '피쳐투', '2024-05-18 00:00:00'),
+       ('feat_3', '피쳐쓰리', '2024-05-18 00:00:00');
 
 /* ISSUE */
 insert into ISSUE (user_id, title, milestone_id)
 VALUES ('test2', '제목', 1),
-       ('test2', '제목3', 1);
+       ('test2', '제목3', 3);
 
 insert into ISSUE (user_id, title)
 VALUES ('test2', '제목2'),
@@ -59,4 +63,10 @@ VALUES (1, 1),
        (10, 2);
 
 insert into ISSUE_HAS_ASSIGNEE(issue_id, assignee_id)
-Values (10, 'test2');
+VALUES (1, 'test3'),
+       (2, 'test2'),
+       (3, 'test1'),
+       (5, 'test1');
+
+insert into COMMENT_FILE(comment_id, file_url)
+VALUES (1,'adsfsfs');
