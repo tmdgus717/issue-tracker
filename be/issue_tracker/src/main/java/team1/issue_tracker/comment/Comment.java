@@ -22,11 +22,16 @@ public class Comment {
     private String content;
     @MappedCollection(idColumn = "comment_id", keyColumn = "id")
     private List<CommentFile> files;
+    @MappedCollection(idColumn = "comment_id", keyColumn = "id")
+    private List<Like> likes;
 
     private LocalDateTime lastModifiedAt;
     private LocalDateTime createdAt;
 
     public String getContent() {
         return content;
+    }
+    public int getLikeCount(){
+        return likes.size();
     }
 }
