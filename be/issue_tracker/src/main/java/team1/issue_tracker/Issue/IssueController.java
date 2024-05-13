@@ -16,7 +16,6 @@ import team1.issue_tracker.Issue.dto.IssueShowResponse;
 @RequestMapping("/issue")
 @RestController
 public class IssueController {
-
     private final IssueService issueService;
 
     @Autowired
@@ -48,5 +47,4 @@ public class IssueController {
     public IssueShowResponse showIssue(@PathVariable("id") Long id) {
         return issueService.showIssue(id);
     }
-
 }

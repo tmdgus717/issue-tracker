@@ -1,6 +1,5 @@
 package team1.issue_tracker.Issue;
 
-import java.util.ArrayList;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Generated;
@@ -30,11 +29,11 @@ public class Issue {
     private String userId;
     private Long milestoneId;
     private String title;
-    @MappedCollection(idColumn = "id", keyColumn = "issue_id")
+    @MappedCollection(idColumn = "issue_id", keyColumn = "id")
     private List<Comment> comments;
-    @MappedCollection(idColumn = "id", keyColumn = "issue_id")
+    @MappedCollection(idColumn = "issue_id", keyColumn = "id")
     private List<IssueLabel> issueHasLabel;
-    @MappedCollection(idColumn = "id", keyColumn = "issue_id")
+    @MappedCollection(idColumn = "issue_id", keyColumn = "id")
     private List<IssueAssignee> issueAssignees;
     private IssueStatus status;
 

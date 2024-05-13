@@ -1,20 +1,18 @@
-package team1.issue_tracker.label;
+package team1.issue_tracker.comment;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Generated;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
-@Table("ISSUE_HAS_LABEL")
+@Table("COMMENT_FILE")
 @Getter
-@Builder
 @AllArgsConstructor
-public class IssueLabel {
+public class CommentFile {
     @Id
     @Generated
     private Long id;
-    private Long issueId;
-    private Long labelId;
+    private Long commentId;
+    private String fileUrl;
 }

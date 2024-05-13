@@ -1,9 +1,11 @@
 package team1.issue_tracker.comment;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Generated;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
@@ -18,6 +20,8 @@ public class Comment {
     private Long issueId;
     private String userId;
     private String content;
+    @MappedCollection(idColumn = "comment_id", keyColumn = "id")
+    private List<CommentFile> files;
 
     private LocalDateTime lastModifiedAt;
     private LocalDateTime createdAt;
