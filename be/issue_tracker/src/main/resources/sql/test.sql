@@ -1,0 +1,1 @@
+INSERT INTO USERS (ID, NAME) VALUES ( 'test', '테스터' );

@@ -1,17 +1,20 @@
 package team1.issue_tracker.comment;
 
-import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Generated;
-import lombok.Getter;
+import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Table("COMMENT")
 @Getter
+@Builder
+@ToString
+@EqualsAndHashCode
 @AllArgsConstructor
 public class Comment {
     @Id
@@ -20,18 +23,28 @@ public class Comment {
     private Long issueId;
     private String userId;
     private String content;
-    @MappedCollection(idColumn = "comment_id", keyColumn = "id")
+    @MappedCollection(idColumn = "COMMENT_ID", keyColumn = "ID")
     private List<CommentFile> files;
-    @MappedCollection(idColumn = "comment_id", keyColumn = "id")
+    @MappedCollection(idColumn = "COMMENT_ID", keyColumn = "ID")
     private List<Like> likes;
 
+    @LastModifiedDate
     private LocalDateTime lastModifiedAt;
+    @CreatedDate
     private LocalDateTime createdAt;
 
     public String getContent() {
         return content;
     }
-    public int getLikeCount(){
+
+    public int getLikeCount() {
         return likes.size();
+    }
+
+    public static Comment makeOnlyComment(Long issueId, String userId, String content) {
+        return Comment.builder()
+                .issueId(issueId)
+                .userId(userId)
+                .content(content).build();
     }
 }

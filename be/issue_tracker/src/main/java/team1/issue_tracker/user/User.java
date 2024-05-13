@@ -2,12 +2,14 @@ package team1.issue_tracker.user;
 
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Table("USERS")
 @Getter
+@Builder
 @AllArgsConstructor
 public class User {
     @Id

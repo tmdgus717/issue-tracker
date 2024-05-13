@@ -1,9 +1,6 @@
 package team1.issue_tracker.Issue;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Generated;
-import lombok.Getter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -11,16 +8,17 @@ import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
 import team1.issue_tracker.comment.Comment;
 import team1.issue_tracker.label.IssueLabel;
-
+import team1.issue_tracker.user.IssueAssignee;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import team1.issue_tracker.user.IssueAssignee;
 
 
 @Table("ISSUE")
 @Getter
 @Builder
+@ToString
 @AllArgsConstructor
 public class Issue {
     @Id
@@ -29,11 +27,11 @@ public class Issue {
     private String userId;
     private Long milestoneId;
     private String title;
-    @MappedCollection(idColumn = "issue_id", keyColumn = "id")
+    @MappedCollection(idColumn = "ISSUE_ID", keyColumn = "ID")
     private List<Comment> comments;
-    @MappedCollection(idColumn = "issue_id", keyColumn = "id")
+    @MappedCollection(idColumn = "ISSUE_ID", keyColumn = "ID")
     private List<IssueLabel> issueHasLabel;
-    @MappedCollection(idColumn = "issue_id", keyColumn = "id")
+    @MappedCollection(idColumn = "ISSUE_ID", keyColumn = "ID")
     private List<IssueAssignee> issueAssignees;
     private IssueStatus status;
 
@@ -44,5 +42,14 @@ public class Issue {
 
     public void setStatus(IssueStatus status) {
         this.status = status;
+    }
+
+    public static Issue makeOnlyIssue(String authorId, String title){
+        return Issue.builder()
+                .userId(authorId)
+                .title(title)
+                .comments(new ArrayList<>())
+                .status(IssueStatus.OPEN)
+                .build();
     }
 }
