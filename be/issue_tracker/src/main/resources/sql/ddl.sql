@@ -90,3 +90,7 @@ create table ISSUE_HAS_ASSIGNEE
     foreign key (assignee_id) references USERS (id),
     unique (issue_id, assignee_id)
 );
+
+CREATE INDEX comment_issue_idx ON COMMENT (issue_id);
+CREATE INDEX assignee_issue_idx ON ISSUE_HAS_ASSIGNEE (issue_id);
+CREATE INDEX label_issue_idx ON ISSUE_HAS_LABEL (issue_id);

@@ -11,6 +11,7 @@ import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 import team1.issue_tracker.comment.Comment;
+import team1.issue_tracker.comment.CommentFile;
 import team1.issue_tracker.comment.CommentRepository;
 import team1.issue_tracker.user.UserRepository;
 
@@ -58,12 +59,21 @@ public class IssueRelationshipTest {
     void saveCommentThroughIssue() {
         // given
         Comment comment = Comment.makeOnlyComment(1L, "test", "댓글내용");
+        comment.getFiles().add(new CommentFile(null, 1L, "!"));
         Issue issue = Issue.makeOnlyIssue("test", "제목");
 
         // when
-        issueRepository.save(issue); // Insert
-        issue.getComments().add(comment);
-        issueRepository.save(issue); // Update
+        Issue saved = issueRepository.save(issue);// Insert
+
+        Issue temp = issueRepository.findById(1L).get();
+
+        temp.getComments().add(comment);
+        System.out.println(issueRepository.save(temp));
+
+
+        saved.getComments().add(comment);
+        issueRepository.save(saved); // Update
+
         Optional<Issue> byId = issueRepository.findById(1L);
 
         //then

@@ -22,13 +22,10 @@ import java.util.List;
 @AllArgsConstructor
 public class Issue {
     @Id
-    @Generated
     private Long id;
     private String userId;
     private Long milestoneId;
     private String title;
-    @MappedCollection(idColumn = "ISSUE_ID", keyColumn = "ID")
-    private List<Comment> comments;
     @MappedCollection(idColumn = "ISSUE_ID", keyColumn = "ID")
     private List<IssueLabel> issueHasLabel;
     @MappedCollection(idColumn = "ISSUE_ID", keyColumn = "ID")
@@ -48,7 +45,6 @@ public class Issue {
         return Issue.builder()
                 .userId(authorId)
                 .title(title)
-                .comments(new ArrayList<>())
                 .status(IssueStatus.OPEN)
                 .build();
     }

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import team1.issue_tracker.Issue.dto.IssueListResponse;
 import team1.issue_tracker.Issue.dto.IssueShowResponse;
 import team1.issue_tracker.comment.Comment;
+import team1.issue_tracker.comment.CommentRepository;
 import team1.issue_tracker.comment.dto.CommentListResponse;
 import team1.issue_tracker.label.IssueLabel;
 import team1.issue_tracker.label.Label;
@@ -23,25 +24,27 @@ public class IssueService {
     private final IssueRepository issueRepository;
     private final LabelRepository labelRepository;
     private final MilestoneRepository milestoneRepository;
+    private final CommentRepository commentRepository;
     private final UserRepository userRepository;
 
 
     @Autowired
     public IssueService(IssueRepository issueRepository, LabelRepository labelRepository,
-                        MilestoneRepository milestoneRepository, UserRepository userRepository) {
+                        MilestoneRepository milestoneRepository, CommentRepository commentRepository, UserRepository userRepository) {
         this.issueRepository = issueRepository;
         this.labelRepository = labelRepository;
         this.milestoneRepository = milestoneRepository;
+        this.commentRepository = commentRepository;
         this.userRepository = userRepository;
     }
 
     public List<IssueListResponse> getList() {
-        List<Issue> issueList = (List<Issue>) issueRepository.findAll();
+        List<Issue> issueList = issueRepository.findAllByStatus(IssueStatus.OPEN);
 
         return issueList.stream().map(issue -> new IssueListResponse(
                 issue.getId(),
                 issue.getTitle(),
-                issue.getComments().get(0).getContent(),
+                commentRepository.findFirstByIssueId(issue.getId()).getContent(),
                 labelsAtIssue(issue),
                 milestoneAtIssue(issue))).toList();
     }
@@ -73,7 +76,7 @@ public class IssueService {
     }
 
     private List<CommentListResponse> commentsAtIssue(Issue issue) {
-        List<Comment> comments = issue.getComments();
+        List<Comment> comments = commentRepository.findAllByIssueId(issue.getId());
 
         return comments.stream()
                 .map(comment -> CommentListResponse.of(comment, userRepository.findNameById(comment.getUserId()))

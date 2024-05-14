@@ -8,6 +8,7 @@ import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Table("COMMENT")
@@ -45,6 +46,8 @@ public class Comment {
         return Comment.builder()
                 .issueId(issueId)
                 .userId(userId)
-                .content(content).build();
+                .content(content)
+                .files(new ArrayList<>()).
+                build();
     }
 }
