@@ -49,8 +49,8 @@ create table COMMENT
     content          text,
     last_modified_at timestamp default current_timestamp,
     created_at       timestamp default current_timestamp,
-    foreign key (issue_id) references ISSUE (id),
-    foreign key (user_id) references USERS (id)
+    foreign key (issue_id) references ISSUE (id) ON DELETE CASCADE,
+    foreign key (user_id) references USERS (id) ON DELETE CASCADE
 );
 
 create table COMMENT_FILE
@@ -58,7 +58,7 @@ create table COMMENT_FILE
     id         bigint auto_increment primary key,
     comment_id bigint,
     file_url   varchar(255) not null,
-    foreign key (comment_id) references COMMENT (id)
+    foreign key (comment_id) references COMMENT (id) ON DELETE CASCADE
 );
 
 create table USER_LIKES_COMMENT
@@ -66,8 +66,8 @@ create table USER_LIKES_COMMENT
     id         bigint auto_increment primary key,
     user_id    varchar(255),
     comment_id bigint,
-    foreign key (user_id) references USERS (id),
-    foreign key (comment_id) references COMMENT (id),
+    foreign key (user_id) references USERS (id) ON DELETE CASCADE,
+    foreign key (comment_id) references COMMENT (id) ON DELETE CASCADE,
     unique (user_id, comment_id)
 );
 

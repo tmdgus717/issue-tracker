@@ -12,18 +12,18 @@ VALUES ('feat_1', '피쳐원', '2024-05-18 00:00:00'),
 
 /* ISSUE */
 insert into ISSUE (user_id, title, milestone_id)
-VALUES ('test2', '제목', 1),
-       ('test2', '제목3', 3);
+VALUES ('test2', '제목1', 1),
+       ('test2', '제목2', 3);
 
 insert into ISSUE (user_id, title)
-VALUES ('test2', '제목2'),
+VALUES ('test2', '제목3'),
        ('test2', '제목 4'),
-       ('test2', '제목 4'),
-       ('test2', '제목 4'),
-       ('test2', '제목 4'),
-       ('test2', '제목 4'),
-       ('test2', '제목 4'),
-       ('test2', '제목 4');
+       ('test2', '제목 5'),
+       ('test2', '제목 6'),
+       ('test2', '제목 7'),
+       ('test2', '제목 8'),
+       ('test2', '제목 9'),
+       ('test2', '제목 10ㅎㅎ');
 
 /* COMMENT */
 insert into COMMENT (user_id, issue_id, content)
