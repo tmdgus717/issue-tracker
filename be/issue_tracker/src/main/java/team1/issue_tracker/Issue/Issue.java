@@ -8,11 +8,14 @@ import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
 import team1.issue_tracker.comment.Comment;
 import team1.issue_tracker.label.IssueLabel;
+import team1.issue_tracker.label.Label;
+import team1.issue_tracker.milestone.Milestone;
 import team1.issue_tracker.user.IssueAssignee;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 
 @Table("ISSUE")
@@ -26,10 +29,10 @@ public class Issue {
     private String userId;
     private Long milestoneId;
     private String title;
-    @MappedCollection(idColumn = "ISSUE_ID", keyColumn = "ID")
-    private List<IssueLabel> issueHasLabel;
-    @MappedCollection(idColumn = "ISSUE_ID", keyColumn = "ID")
-    private List<IssueAssignee> issueAssignees;
+    @MappedCollection(idColumn = "ISSUE_ID")
+    private Set<IssueLabel> issueHasLabel;
+    @MappedCollection(idColumn = "ISSUE_ID")
+    private Set<IssueAssignee> issueAssignees;
     private IssueStatus status;
 
     @LastModifiedDate
@@ -39,6 +42,10 @@ public class Issue {
 
     public void setStatus(IssueStatus status) {
         this.status = status;
+    }
+
+    public void attacheLabel(Long labelId){
+        this.issueHasLabel.add(IssueLabel.of(this.id , labelId));
     }
 
     public static Issue makeOnlyIssue(String authorId, String title){

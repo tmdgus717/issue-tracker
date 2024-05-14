@@ -16,7 +16,11 @@ import team1.issue_tracker.user.IssueAssignee;
 import team1.issue_tracker.user.UserRepository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Set;
+
+import static team1.issue_tracker.Issue.IssueStatus.CLOSE;
 
 @Service
 public class IssueService {
@@ -49,30 +53,30 @@ public class IssueService {
                 milestoneAtIssue(issue))).toList();
     }
 
-    public IssueShowResponse showIssue(Long id) {
-        Optional<Issue> optionalIssue = issueRepository.findById(id);
-        if (optionalIssue.isEmpty()) return null;
-
-        Issue issue = optionalIssue.get();
+    public IssueShowResponse showIssue(Long id) throws NoSuchElementException{
+        Issue issue = getIssue(id);
         String name = userRepository.findNameById(issue.getUserId());
 
         return IssueShowResponse.of(issue, name, assigneesAtIssue(issue), labelsAtIssue(issue), milestoneAtIssue(issue), commentsAtIssue(issue));
     }
 
+    public void closeIssue(Long id) throws NoSuchElementException{
+        Issue issue = getIssue(id);
+        if (issue.getStatus() == CLOSE) throw new IllegalStateException(id + "번 이슈는 이미 닫힌 상태입니다!");
 
-    public void closeIssue(Long id) {
-        Optional<Issue> optionalIssue = issueRepository.findById(id);
-        if (optionalIssue.isEmpty()) {
-            return;
-        }
-
-        Issue issue = optionalIssue.get();
-        issue.setStatus(IssueStatus.CLOSE);
+        issue.setStatus(CLOSE);
         issueRepository.save(issue);
     }
 
     public void deleteIssue(Long id) {
         issueRepository.deleteById(id);
+    }
+
+    private Issue getIssue(Long id) throws NoSuchElementException{
+        Optional<Issue> optionalIssue = issueRepository.findById(id);
+        if (optionalIssue.isEmpty()) throw new NoSuchElementException( id + "번 이슈가 존재하지 않습니다!");
+
+        return optionalIssue.get();
     }
 
     private List<CommentListResponse> commentsAtIssue(Issue issue) {
@@ -84,7 +88,7 @@ public class IssueService {
     }
 
     private List<Label> labelsAtIssue(Issue issue) {
-        List<IssueLabel> issueLabels = issue.getIssueHasLabel();
+        Set<IssueLabel> issueLabels = issue.getIssueHasLabel();
         List<Long> labelIds = issueLabels.stream().map(IssueLabel::getLabelId).toList();
 
         return (List<Label>) labelRepository.findAllById(labelIds);
@@ -98,7 +102,7 @@ public class IssueService {
     }
 
     private List<String> assigneesAtIssue(Issue issue) {
-        List<IssueAssignee> issueAssignees = issue.getIssueAssignees();
+        Set<IssueAssignee> issueAssignees = issue.getIssueAssignees();
         return issueAssignees.stream()
                 .map(IssueAssignee::getAssigneeId)
                 .map(userRepository::findNameById).toList();

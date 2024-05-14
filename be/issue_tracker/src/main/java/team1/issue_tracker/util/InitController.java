@@ -1,4 +1,4 @@
-package team1.issue_tracker;
+package team1.issue_tracker.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;

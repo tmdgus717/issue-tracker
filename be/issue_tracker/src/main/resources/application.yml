@@ -4,9 +4,9 @@ spring:
   profiles:
     active: dev
 
-#logging:
-#  level:
-#    org.springframework.jdbc.core: DEBUG
+logging:
+  level:
+    org.springframework.jdbc.core: DEBUG
 
 ---
 
