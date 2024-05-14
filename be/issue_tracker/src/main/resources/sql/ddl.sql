@@ -37,8 +37,8 @@ create table ISSUE
     status           varchar(50)  not null default 'OPEN',
     last_modified_at timestamp             default current_timestamp,
     created_at       timestamp             default current_timestamp,
-    foreign key (user_id) references USERS (id),
-    foreign key (milestone_id) references MILESTONE (id)
+    foreign key (user_id) references USERS (id) ON DELETE CASCADE,
+    foreign key (milestone_id) references MILESTONE (id) ON DELETE SET NULL
 );
 
 create table COMMENT
@@ -76,8 +76,8 @@ create table ISSUE_HAS_LABEL
     id       bigint auto_increment primary key,
     issue_id bigint,
     label_id bigint,
-    foreign key (issue_id) references ISSUE (id),
-    foreign key (label_id) references LABEL (id),
+    foreign key (issue_id) references ISSUE (id) ON DELETE CASCADE,
+    foreign key (label_id) references LABEL (id) ON DELETE CASCADE,
     unique (issue_id, label_id)
 );
 
@@ -86,8 +86,8 @@ create table ISSUE_HAS_ASSIGNEE
     id          bigint auto_increment primary key,
     issue_id    bigint,
     assignee_id varchar(255),
-    foreign key (issue_id) references ISSUE (id),
-    foreign key (assignee_id) references USERS (id),
+    foreign key (issue_id) references ISSUE (id) ON DELETE CASCADE,
+    foreign key (assignee_id) references USERS (id) ON DELETE CASCADE,
     unique (issue_id, assignee_id)
 );
 

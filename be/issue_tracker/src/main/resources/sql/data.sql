@@ -60,7 +60,8 @@ VALUES (1, 1),
        (4, 3),
        (4, 4),
        (4, 5),
-       (10, 2);
+       (10, 2),
+       (1,3);
 
 insert into ISSUE_HAS_ASSIGNEE(issue_id, assignee_id)
 VALUES (1, 'test3'),
