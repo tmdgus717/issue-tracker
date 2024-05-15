@@ -17,4 +17,11 @@ public class IssueLabel {
     private Long id;
     private Long issueId;
     private Long labelId;
+
+    public static IssueLabel of(Long issueId , Long labelId){
+        return IssueLabel.builder()
+                .issueId(issueId)
+                .labelId(labelId)
+                .build();
+    }
 }
