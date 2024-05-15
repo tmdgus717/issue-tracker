@@ -1,6 +1,7 @@
 package team1.issue_tracker.user;
 
 import org.springframework.web.bind.annotation.*;
+import team1.issue_tracker.user.dto.CheckDuplicateRequest;
 
 @RequestMapping("/user")
 @RestController
@@ -12,12 +13,7 @@ public class UserController {
     }
 
     @GetMapping("/duplicate")
-    public boolean isDuplicateId(@RequestBody String id){
-        return false;
-    }
-
-    @GetMapping("/duplicate")
-    public boolean isDuplicateNickName(@RequestBody String nickName){
+    public boolean isDuplicate(@RequestBody CheckDuplicateRequest request){
         return false;
     }
 

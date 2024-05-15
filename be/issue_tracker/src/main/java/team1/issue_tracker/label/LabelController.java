@@ -1,6 +1,8 @@
 package team1.issue_tracker.label;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import team1.issue_tracker.label.dto.LabelListResponse;
 
 import java.util.List;
 
@@ -8,9 +10,16 @@ import java.util.List;
 @RestController
 public class LabelController {
 
+    private final LabelService labelService;
+
+    @Autowired
+    public LabelController(LabelService labelService) {
+        this.labelService = labelService;
+    }
+
     @GetMapping("/list")
-    public List<Label> labelList(){
-        return null;
+    public List<LabelListResponse> labelList(){
+        return labelService.getList();
     }
 
     @PostMapping
