@@ -7,3 +7,11 @@ spring:
 logging:
   level:
     org.springframework.jdbc.core: DEBUG
+
+---
+
+spring:
+    config:
+      activate:
+            on-profile: test
+      import: classpath:test-db-config.yml
