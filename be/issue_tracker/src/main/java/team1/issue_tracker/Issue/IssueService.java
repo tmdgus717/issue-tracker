@@ -60,15 +60,8 @@ public class IssueService {
     }
 
     public void closeIssue(Long id) throws NoSuchElementException {
-<<<<<<< HEAD
         Issue issue = getIssueById(id);
         if (issue.getStatus() == CLOSE) throw new IllegalStateException(id + "번 이슈는 이미 닫힌 상태입니다!");
-=======
-        Issue issue = getIssue(id);
-        if (issue.getStatus() == CLOSE) {
-            throw new IllegalStateException(id + "번 이슈는 이미 닫힌 상태입니다!");
-        }
->>>>>>> a0b9d21 (feat(#52): Milestone DTO 적용)
 
         issue.setStatus(CLOSE);
         issueRepository.save(issue);
