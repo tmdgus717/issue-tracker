@@ -1,34 +1,63 @@
 package team1.issue_tracker.Issue;
 
-import java.util.List;
-import java.util.NoSuchElementException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import team1.issue_tracker.Issue.dto.IssueListResponse;
 import team1.issue_tracker.Issue.dto.IssueShowResponse;
+import team1.issue_tracker.comment.CommentService;
+import team1.issue_tracker.label.LabelService;
+import team1.issue_tracker.milestone.MilestoneService;
+import team1.issue_tracker.user.UserService;
+
+import java.util.List;
+import java.util.NoSuchElementException;
 
 @RequestMapping("/issue")
 @Slf4j
 @RestController
 public class IssueController {
     private final IssueService issueService;
+    private final CommentService commentService;
+    private final LabelService labelService;
+    private final MilestoneService milestoneService;
+    private final UserService userService;
 
     @Autowired
-    public IssueController(IssueService issueService) {
+    public IssueController(IssueService issueService, CommentService commentService, LabelService labelService, MilestoneService milestoneService, UserService userService) {
         this.issueService = issueService;
+        this.commentService = commentService;
+        this.labelService = labelService;
+        this.milestoneService = milestoneService;
+        this.userService = userService;
+    }
+
+    @GetMapping("/{id}")
+    public IssueShowResponse showIssue(@PathVariable("id") Long id) {
+        log.debug("Show issue.{} detail", id);
+        Issue issue = issueService.showIssue(id);
+        String authorName = userService.getNameById(issue.getUserId());
+
+        return IssueShowResponse.of(
+                issue,
+                authorName,
+                userService.getAssigneesAtIssue(issue),
+                labelService.getLabelsAyIssue(issue),
+                milestoneService.getMilestoneAtIssue(issue),
+                commentService.getCommentsAtIssue(issue.getId()));
     }
 
     @GetMapping("/list")
     public List<IssueListResponse> issueList() {
         log.debug("Show issue list");
-        return issueService.getOpenIssues();
+        List<Issue> issueList = issueService.getOpenIssues();
+
+        return issueList.stream().map(issue -> IssueListResponse.of(
+                issue,
+                commentService.getFirstCommentTextAtIssue(issue),
+                labelService.getLabelsAyIssue(issue),
+                milestoneService.getMilestoneAtIssue(issue)))
+                .toList();
     }
 
     @PostMapping("/{id}/close")
@@ -38,7 +67,7 @@ public class IssueController {
     }
 
     @PostMapping("/multi/close")
-    public void closeMultiIssue(@RequestBody List<Long> issueIds) throws RuntimeException{
+    public void closeMultiIssue(@RequestBody List<Long> issueIds) throws RuntimeException {
         log.debug("Close all issues.{}", issueIds);
         issueService.closeIssues(issueIds);
     }
@@ -47,11 +76,5 @@ public class IssueController {
     public void deleteIssue(@PathVariable("id") Long id) {
         log.debug("Delete issue.{}", id);
         issueService.deleteIssue(id);
-    }
-
-    @GetMapping("/{id}")
-    public IssueShowResponse showIssue(@PathVariable("id") Long id) {
-        log.debug("Show issue.{} detail", id);
-        return issueService.showIssue(id);
     }
 }

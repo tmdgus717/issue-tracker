@@ -2,6 +2,7 @@ package team1.issue_tracker.comment;
 
 import org.springframework.data.relational.core.conversion.DbActionExecutionException;
 import org.springframework.stereotype.Service;
+import team1.issue_tracker.Issue.Issue;
 import team1.issue_tracker.Issue.IssueService;
 import team1.issue_tracker.comment.dto.CommentListResponse;
 import team1.issue_tracker.comment.dto.CommentPostRequest;
@@ -69,6 +70,10 @@ public class CommentService {
 
     private static Predicate<Like> isSame(String userId, long commentId) {
         return like -> like.getCommentId().equals(commentId) && like.getUserId().equals(userId);
+    }
+
+    public String getFirstCommentTextAtIssue(Issue issue){
+        return commentRepository.findFirstByIssueId(issue.getId()).getContent();
     }
 
     private Comment getCommentById(long commentId) {
