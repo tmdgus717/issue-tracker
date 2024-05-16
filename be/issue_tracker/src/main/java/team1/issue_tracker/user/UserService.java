@@ -2,7 +2,9 @@ package team1.issue_tracker.user;
 
 import org.springframework.stereotype.Service;
 import team1.issue_tracker.user.dto.RegisterInfo;
+import team1.issue_tracker.user.dto.UserInfoResponse;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -33,5 +35,12 @@ public class UserService {
 
         User newUser = User.normalUSerOf(registerInfo);
         userRepository.insert(newUser);
+    }
+
+    public UserInfoResponse getUserInfo(String id) {
+        Optional<User> byId = userRepository.findById(id);
+        byId.orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원 ID 입니다"));
+
+        return UserInfoResponse.of(byId.get());
     }
 }

@@ -33,4 +33,8 @@ public class User {
                 .loginType(UserType.NORMAL)
                 .build();
     }
+
+    public LocalDateTime getCreatedAt(){
+        return this.createdAt;
+    }
 }

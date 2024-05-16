@@ -3,6 +3,9 @@ package team1.issue_tracker.user;
 import org.springframework.web.bind.annotation.*;
 import team1.issue_tracker.user.dto.CheckDuplicateRequest;
 import team1.issue_tracker.user.dto.RegisterInfo;
+import team1.issue_tracker.user.dto.UserInfoResponse;
+
+import java.util.NoSuchElementException;
 
 @RequestMapping("/user")
 @RestController
@@ -15,7 +18,7 @@ public class UserController {
     }
 
     @PostMapping
-    public void register(@RequestBody RegisterInfo registerInfo){
+    public void register(@RequestBody RegisterInfo registerInfo) throws IllegalArgumentException{
         System.out.println(registerInfo);
         userService.createUser(registerInfo);
     }
@@ -40,7 +43,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public User userInfo(@PathVariable String id){
-        return null;
+    public UserInfoResponse userInfo(@PathVariable String id) throws NoSuchElementException {
+      return userService.getUserInfo(id);
     }
 }
