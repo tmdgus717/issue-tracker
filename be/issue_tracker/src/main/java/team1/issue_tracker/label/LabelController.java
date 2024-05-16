@@ -23,8 +23,9 @@ public class LabelController {
     }
 
     @PostMapping
-    public void makeLabel(){
-
+    public void makeLabel(@RequestBody Label label){
+        //생성
+        labelService.saveLabel(label);
     }
 
     @PatchMapping("/{id}")
@@ -33,7 +34,7 @@ public class LabelController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteLabel(@PathVariable long id){
-
+    public void deleteLabel(@PathVariable long id) {
+        labelService.deleteLabel(id);
     }
 }
