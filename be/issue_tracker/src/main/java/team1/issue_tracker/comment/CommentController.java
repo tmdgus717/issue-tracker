@@ -6,13 +6,17 @@ import team1.issue_tracker.comment.dto.CommentListResponse;
 
 import java.util.List;
 
-
 @RestController
 public class CommentController {
+    private final CommentService commentService;
+
+    public CommentController(CommentService commentService) {
+        this.commentService = commentService;
+    }
 
     @GetMapping("/issue/{issueId}/comment/list")
     public List<CommentListResponse> commentsAtIssue(@PathVariable long issueId){
-        return null;
+        return commentService.getCommentsAtIssue(issueId);
     }
 
     @PostMapping("/issue/{issueId}/comment")
@@ -32,11 +36,11 @@ public class CommentController {
 
     @PostMapping("/comment/{id}/like")
     public int likeComment(@PathVariable long id , HttpServletRequest request){
-        return 0;
+        return commentService.likeComment("test1", id); // 로그인 기능 구현 전 임시로 'test1' 유저 사용
     }
 
     @PostMapping("/comment/{id}/unlike")
     public int unLikeComment(@PathVariable long id , HttpServletRequest request){
-        return 0;
+        return commentService.unlikeComment("test1", id);
     }
 }
