@@ -7,7 +7,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository extends CrudRepository<User, String> {
-
-    @Query("SELECT NAME FROM USERS WHERE ID = :id")
-    String findNameById(@Param("id") String id);
 }

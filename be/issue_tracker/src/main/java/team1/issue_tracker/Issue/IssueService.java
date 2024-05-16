@@ -13,12 +13,9 @@ import team1.issue_tracker.label.LabelRepository;
 import team1.issue_tracker.milestone.Milestone;
 import team1.issue_tracker.milestone.MilestoneRepository;
 import team1.issue_tracker.user.IssueAssignee;
-import team1.issue_tracker.user.UserRepository;
+import team1.issue_tracker.user.UserService;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static team1.issue_tracker.Issue.IssueStatus.CLOSE;
 
@@ -29,19 +26,19 @@ public class IssueService {
     private final LabelRepository labelRepository;
     private final MilestoneRepository milestoneRepository;
     private final CommentRepository commentRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Autowired
     public IssueService(IssueRepository issueRepository, LabelRepository labelRepository,
-                        MilestoneRepository milestoneRepository, CommentRepository commentRepository, UserRepository userRepository) {
+                        MilestoneRepository milestoneRepository, CommentRepository commentRepository, UserService userService) {
         this.issueRepository = issueRepository;
         this.labelRepository = labelRepository;
         this.milestoneRepository = milestoneRepository;
         this.commentRepository = commentRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
-    public List<IssueListResponse> getList() {
+    public List<IssueListResponse> getOpenIssues() {
         List<Issue> issueList = issueRepository.findAllByStatus(IssueStatus.OPEN);
 
         return issueList.stream().map(issue -> new IssueListResponse(
@@ -52,14 +49,14 @@ public class IssueService {
                 milestoneAtIssue(issue))).toList();
     }
 
-    public IssueShowResponse showIssue(Long id) throws NoSuchElementException{
+    public IssueShowResponse showIssue(Long id) throws NoSuchElementException {
         Issue issue = getIssue(id);
-        String name = userRepository.findNameById(issue.getUserId());
+        String name = userService.getNameById(issue.getUserId());
 
         return IssueShowResponse.of(issue, name, assigneesAtIssue(issue), labelsAtIssue(issue), milestoneAtIssue(issue), commentsAtIssue(issue));
     }
 
-    public void closeIssue(Long id) throws NoSuchElementException{
+    public void closeIssue(Long id) throws NoSuchElementException {
         Issue issue = getIssue(id);
         if (issue.getStatus() == CLOSE) throw new IllegalStateException(id + "번 이슈는 이미 닫힌 상태입니다!");
 
@@ -67,13 +64,13 @@ public class IssueService {
         issueRepository.save(issue);
     }
 
-    public void deleteIssue(Long id) {
-        issueRepository.deleteById(id);
+    public void deleteIssue(Long id) throws NoSuchElementException {
+        issueRepository.delete(getIssue(id));
     }
 
-    private Issue getIssue(Long id) throws NoSuchElementException{
+    private Issue getIssue(Long id) throws NoSuchElementException {
         Optional<Issue> optionalIssue = issueRepository.findById(id);
-        if (optionalIssue.isEmpty()) throw new NoSuchElementException( id + "번 이슈가 존재하지 않습니다!");
+        if (optionalIssue.isEmpty()) throw new NoSuchElementException(id + "번 이슈가 존재하지 않습니다!");
 
         return optionalIssue.get();
     }
@@ -82,7 +79,7 @@ public class IssueService {
         List<Comment> comments = commentRepository.findAllByIssueId(issue.getId());
 
         return comments.stream()
-                .map(comment -> CommentListResponse.of(comment, userRepository.findNameById(comment.getUserId()))
+                .map(comment -> CommentListResponse.of(comment, userService.getNameById(comment.getUserId()))
                 ).toList();
     }
 
@@ -90,7 +87,7 @@ public class IssueService {
         Set<IssueLabel> issueLabels = issue.getIssueHasLabel();
         List<Long> labelIds = issueLabels.stream().map(IssueLabel::getLabelId).toList();
 
-        return (List<Label>) labelRepository.findAllById(labelIds);
+        return labelRepository.findByIdIn(labelIds);
     }
 
     private Milestone milestoneAtIssue(Issue issue) {
@@ -104,6 +101,19 @@ public class IssueService {
         Set<IssueAssignee> issueAssignees = issue.getIssueAssignees();
         return issueAssignees.stream()
                 .map(IssueAssignee::getAssigneeId)
-                .map(userRepository::findNameById).toList();
+                .map(userService::getNameById).toList();
+    }
+
+    public void closeIssues(List<Long> issueIds) {
+        StringJoiner exceptionMessages = new StringJoiner("\n");
+        issueIds.forEach(id -> {
+            try {
+                closeIssue(id);
+            } catch (RuntimeException exception) {
+                exceptionMessages.add(exception.getMessage());
+            }
+        });
+
+        if (exceptionMessages.length() != 0) throw new RuntimeException(exceptionMessages.toString());
     }
 }

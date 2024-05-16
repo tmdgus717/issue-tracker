@@ -40,10 +40,6 @@ public class Issue {
         this.status = status;
     }
 
-//    public void attacheLabel(Long labelId){
-//        this.issueHasLabel.add(IssueLabel.of(this.id , labelId));
-//    }
-
     public static Issue makeOnlyIssue(String authorId, String title){
         return Issue.builder()
                 .userId(authorId)
