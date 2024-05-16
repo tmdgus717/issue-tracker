@@ -82,4 +82,19 @@ public class CommentService {
 
         return byId.get();
     }
+
+    public boolean canModify(long id, String userId) throws NoSuchElementException{
+        return getCommentById(id).getUserId().equals(userId);
+    }
+
+    public Comment modifyComment(long id, String userId, CommentPostRequest commentInfo) throws NoSuchElementException{
+        Comment origin = getCommentById(id);
+        Comment newComment = Comment.makeOnlyComment(origin.getIssueId(), userId, commentInfo.content());
+        commentRepository.save(newComment);
+        return getCommentById(id);
+    }
+
+    public void deleteComment(Long commentId) throws NoSuchElementException{
+        commentRepository.delete(getCommentById(commentId));
+    }
 }

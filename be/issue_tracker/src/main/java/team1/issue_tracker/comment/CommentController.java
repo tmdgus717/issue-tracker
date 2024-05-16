@@ -4,6 +4,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.*;
 import team1.issue_tracker.comment.dto.CommentPostRequest;
 
+import java.util.NoSuchElementException;
+
 @RestController
 public class CommentController {
     private final CommentService commentService;
@@ -18,13 +20,16 @@ public class CommentController {
     }
 
     @PatchMapping("/comment/{id}")
-    public Comment modifyComment(@PathVariable long id) {
-        return null;
+    public Comment modifyComment(@PathVariable long id, @RequestBody CommentPostRequest commentInfo, HttpServletRequest request) throws NoSuchFieldError{
+        // 유저 ID와 작성자가 일치하지 않으면 예외
+        if(!commentService.canModify(id, "test1")) throw new IllegalArgumentException("다른 사람의 댓글을 수정할 수 없습니다!");
+
+        return commentService.modifyComment(id, "test1", commentInfo);
     }
 
     @DeleteMapping("/comment/{id}")
-    public void deleteComment(@PathVariable long id) {
-
+    public void deleteComment(@PathVariable long id) throws NoSuchElementException {
+        commentService.deleteComment(id);
     }
 
     @PostMapping("/comment/{id}/like")
