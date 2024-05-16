@@ -2,7 +2,9 @@ package team1.issue_tracker.comment;
 
 import org.springframework.data.relational.core.conversion.DbActionExecutionException;
 import org.springframework.stereotype.Service;
+import team1.issue_tracker.Issue.IssueService;
 import team1.issue_tracker.comment.dto.CommentListResponse;
+import team1.issue_tracker.comment.dto.CommentPostRequest;
 import team1.issue_tracker.user.UserService;
 
 import java.util.List;
@@ -13,10 +15,12 @@ import java.util.function.Predicate;
 @Service
 public class CommentService {
     private final CommentRepository commentRepository;
+    private final IssueService issueService;
     private final UserService userService;
 
-    public CommentService(CommentRepository commentRepository, UserService userService) {
+    public CommentService(CommentRepository commentRepository, IssueService issueService, UserService userService) {
         this.commentRepository = commentRepository;
+        this.issueService = issueService;
         this.userService = userService;
     }
 
@@ -26,6 +30,12 @@ public class CommentService {
         return comments.stream()
                 .map(comment -> CommentListResponse.of(comment, userService.getNameById(comment.getUserId()))
                 ).toList();
+    }
+
+    public void addComment(long issueId, String userId, CommentPostRequest request) throws NoSuchElementException{
+        issueService.getIssueById(issueId);
+        Comment newComment = Comment.makeOnlyComment(issueId, userId, request.content());
+        commentRepository.save(newComment);
     }
 
     public int likeComment(String userId, long commentId) {

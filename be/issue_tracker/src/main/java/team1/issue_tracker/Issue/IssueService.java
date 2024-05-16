@@ -50,14 +50,14 @@ public class IssueService {
     }
 
     public IssueShowResponse showIssue(Long id) throws NoSuchElementException {
-        Issue issue = getIssue(id);
+        Issue issue = getIssueById(id);
         String name = userService.getNameById(issue.getUserId());
 
         return IssueShowResponse.of(issue, name, assigneesAtIssue(issue), labelsAtIssue(issue), milestoneAtIssue(issue), commentsAtIssue(issue));
     }
 
     public void closeIssue(Long id) throws NoSuchElementException {
-        Issue issue = getIssue(id);
+        Issue issue = getIssueById(id);
         if (issue.getStatus() == CLOSE) throw new IllegalStateException(id + "번 이슈는 이미 닫힌 상태입니다!");
 
         issue.setStatus(CLOSE);
@@ -65,10 +65,10 @@ public class IssueService {
     }
 
     public void deleteIssue(Long id) throws NoSuchElementException {
-        issueRepository.delete(getIssue(id));
+        issueRepository.delete(getIssueById(id));
     }
 
-    private Issue getIssue(Long id) throws NoSuchElementException {
+    public Issue getIssueById(Long id) throws NoSuchElementException {
         Optional<Issue> optionalIssue = issueRepository.findById(id);
         if (optionalIssue.isEmpty()) throw new NoSuchElementException(id + "번 이슈가 존재하지 않습니다!");
 
