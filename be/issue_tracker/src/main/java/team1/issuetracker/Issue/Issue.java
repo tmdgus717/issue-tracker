@@ -55,7 +55,6 @@ public class Issue {
 
     public static Issue from(IssueMakeRequest request, String userId) {
         String title = request.getTitle();
-        String comment = request.getComment();
         List<String> assigneeIds = request.getAssigneeIds();
         List<Long> labelIds = request.getLabelIds();
         Long milestoneId = request.getMilestoneId();

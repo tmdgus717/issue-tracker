@@ -33,7 +33,7 @@ public class CommentService {
                 ).toList();
     }
 
-    public void addComment(long issueId, String userId, CommentPostRequest request) throws NoSuchElementException{
+    public void addComment(long issueId, String userId, CommentPostRequest request) throws NoSuchElementException {
         issueService.getIssueById(issueId);
         Comment newComment = Comment.makeOnlyComment(issueId, userId, request.content());
         commentRepository.save(newComment);
@@ -68,12 +68,24 @@ public class CommentService {
         return likes.size();
     }
 
-    private static Predicate<Like> isSame(String userId, long commentId) {
-        return like -> like.getCommentId().equals(commentId) && like.getUserId().equals(userId);
+    public String getFirstCommentTextAtIssue(Issue issue) {
+        return commentRepository.findFirstByIssueId(issue.getId()).getContent();
     }
 
-    public String getFirstCommentTextAtIssue(Issue issue){
-        return commentRepository.findFirstByIssueId(issue.getId()).getContent();
+
+    public boolean canModify(long id, String userId) throws NoSuchElementException {
+        return getCommentById(id).getUserId().equals(userId);
+    }
+
+    public Comment modifyComment(long id, String userId, CommentPostRequest commentInfo) throws NoSuchElementException {
+        Comment origin = getCommentById(id);
+        Comment newComment = Comment.makeOnlyComment(origin.getIssueId(), userId, commentInfo.content());
+        commentRepository.save(newComment);
+        return getCommentById(id);
+    }
+
+    public void deleteComment(Long commentId) throws NoSuchElementException {
+        commentRepository.delete(getCommentById(commentId));
     }
 
     private Comment getCommentById(long commentId) {
@@ -83,18 +95,7 @@ public class CommentService {
         return byId.get();
     }
 
-    public boolean canModify(long id, String userId) throws NoSuchElementException{
-        return getCommentById(id).getUserId().equals(userId);
-    }
-
-    public Comment modifyComment(long id, String userId, CommentPostRequest commentInfo) throws NoSuchElementException{
-        Comment origin = getCommentById(id);
-        Comment newComment = Comment.makeOnlyComment(origin.getIssueId(), userId, commentInfo.content());
-        commentRepository.save(newComment);
-        return getCommentById(id);
-    }
-
-    public void deleteComment(Long commentId) throws NoSuchElementException{
-        commentRepository.delete(getCommentById(commentId));
+    private Predicate<Like> isSame(String userId, long commentId) {
+        return like -> like.getCommentId().equals(commentId) && like.getUserId().equals(userId);
     }
 }
