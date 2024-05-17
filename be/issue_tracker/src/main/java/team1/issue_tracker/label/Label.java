@@ -9,6 +9,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
+import team1.issue_tracker.label.dto.LabelMakeRequest;
 
 @Table("LABEL")
 @Getter
@@ -23,4 +24,12 @@ public class Label {
     private String color;
     @CreatedDate
     private LocalDateTime createdAt;
+
+    public static Label of(LabelMakeRequest labelMakeRequest) {
+        return Label.builder()
+            .name(labelMakeRequest.getName())
+            .description(labelMakeRequest.getDescription())
+            .color(labelMakeRequest.getColor())
+            .build();
+    }
 }

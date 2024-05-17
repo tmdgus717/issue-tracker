@@ -29,6 +29,7 @@ public class IssueService {
     }
 
     public void closeIssue(Long id) throws NoSuchElementException {
+
         Issue issue = getIssueById(id);
         if (issue.getStatus() == CLOSE) throw new IllegalStateException(id + "번 이슈는 이미 닫힌 상태입니다!");
 
