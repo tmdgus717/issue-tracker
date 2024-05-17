@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import team1.issue_tracker.label.dto.LabelListResponse;
 
 import java.util.List;
+import team1.issue_tracker.label.dto.LabelMakeRequest;
 
 @RequestMapping("/label")
 @RestController
@@ -23,14 +24,13 @@ public class LabelController {
     }
 
     @PostMapping
-    public void makeLabel(@RequestBody Label label){
-        //생성
-        labelService.saveLabel(label);
+    public void makeLabel(@RequestBody LabelMakeRequest labelMakeRequest){
+        labelService.saveLabel(labelMakeRequest);
     }
 
     @PatchMapping("/{id}")
-    public Label modifyLabel(@PathVariable long id){
-        return null;
+    public Label modifyLabel(@PathVariable long id, @RequestBody LabelMakeRequest labelMakeRequest){
+        return labelService.updateLabel(id, labelMakeRequest);
     }
 
     @DeleteMapping("/{id}")

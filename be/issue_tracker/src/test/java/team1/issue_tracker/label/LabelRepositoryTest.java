@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
 
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJdbcTest
@@ -16,7 +14,7 @@ public class LabelRepositoryTest {
     @Autowired
     LabelRepository labelRepository;
 
-    @DisplayName("h2 saveTest")
+    @DisplayName("label save test")
     @Test
     void saveTest() {
         //given
@@ -27,12 +25,16 @@ public class LabelRepositoryTest {
             .name("testLabel")
             .build();
 
-        System.out.println(label);
         assertThat(label.getColor()).isEqualTo("#000000");
         assertThat(label.getCreatedAt()).isNotNull();
 
-        //whens
-        labelRepository.save(label);
+        //when
+        Label savedLabel = labelRepository.save(label);
+
+        //then
+        assertThat(savedLabel.getName()).isEqualTo(label.getName());
     }
+
+
 
 }
