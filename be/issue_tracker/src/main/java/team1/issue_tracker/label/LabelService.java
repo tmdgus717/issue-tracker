@@ -31,7 +31,15 @@ public class LabelService {
     public Label updateLabel(long id, LabelMakeRequest labelMakeRequest) {
         Label savedLabel = getLabel(id);
 
-        return savedLabel;
+        Label updateLabel = Label.builder()
+            .id(savedLabel.getId())
+            .name(labelMakeRequest.getName())
+            .description(labelMakeRequest.getDescription())
+            .color(labelMakeRequest.getColor())
+            .createdAt(savedLabel.getCreatedAt())
+            .build();
+
+        return labelRepository.save(updateLabel);
     }
 
     public void deleteLabel(Long id) throws NoSuchElementException {
