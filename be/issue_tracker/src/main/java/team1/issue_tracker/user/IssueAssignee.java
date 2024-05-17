@@ -1,4 +1,4 @@
-package team1.issue_tracker.label;
+package team1.issue_tracker.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,21 +7,14 @@ import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
-@Table("ISSUE_HAS_LABEL")
+@Table("ISSUE_HAS_ASSIGNEE")
 @Getter
 @Builder
 @AllArgsConstructor
-public class IssueLabel {
+public class IssueAssignee {
     @Id
     @Generated
     private Long id;
     private Long issueId;
-    private Long labelId;
-
-    public static IssueLabel of(Long issueId , Long labelId){
-        return IssueLabel.builder()
-                .issueId(issueId)
-                .labelId(labelId)
-                .build();
-    }
+    private String assigneeId;
 }

@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: issue_tracker
+  profiles:
+    active: test
+
+logging:
+  level:
+    org.springframework.jdbc.core: DEBUG

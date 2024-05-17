@@ -1,4 +1,4 @@
-package team1.issue_tracker.Issue;
+package team1.issue_tracker.Issue.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import team1.issue_tracker.milestone.Milestone;
 
 @Getter
 @AllArgsConstructor
-public class IssueListRes {
+public class IssueListResponse {
     private long id;
     private String title;
     private String comment;

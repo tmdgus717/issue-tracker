@@ -3,6 +3,11 @@ spring:
     name: issue_tracker
   profiles:
     active: dev
+
+logging:
+  level:
+    org.springframework.jdbc.core: INFO
+
 ---
 
 spring:
