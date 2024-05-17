@@ -36,7 +36,7 @@ public class UserService {
         if (isDuplicateId(registerInfo.id())) {
             throw new IllegalArgumentException("이미 등록된 ID 입니다");
         }
-        if (isDuplicateId(registerInfo.nickname())) {
+        if (isDuplicateNickName(registerInfo.nickname())) {
             throw new IllegalArgumentException("이미 등록된 닉네임 입니다");
         }
 
