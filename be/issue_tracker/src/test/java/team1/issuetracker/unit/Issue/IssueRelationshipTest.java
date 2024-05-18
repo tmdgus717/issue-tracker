@@ -1,10 +1,12 @@
-package team1.issuetracker.Issue;
+package team1.issuetracker.unit.Issue;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
 import org.springframework.transaction.annotation.Transactional;
+import team1.issuetracker.Issue.Issue;
+import team1.issuetracker.Issue.IssueRepository;
 import team1.issuetracker.comment.CommentRepository;
 import team1.issuetracker.user.UserRepository;
 

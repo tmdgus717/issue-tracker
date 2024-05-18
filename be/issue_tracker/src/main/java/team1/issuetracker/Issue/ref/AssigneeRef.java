@@ -11,6 +11,6 @@ import org.springframework.data.relational.core.mapping.Table;
 @Builder
 @AllArgsConstructor
 public class AssigneeRef {
-    @Column("assignee_id")
+    @Column("ASSIGNEE_ID")
     private String userId;
 }

@@ -1,4 +1,4 @@
-package team1.issuetracker.milestone;
+package team1.issuetracker.unit.milestone;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -8,6 +8,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
+import team1.issuetracker.milestone.Milestone;
+import team1.issuetracker.milestone.MilestoneRepository;
 
 @DataJdbcTest
 class MilestoneRepositoryTest {

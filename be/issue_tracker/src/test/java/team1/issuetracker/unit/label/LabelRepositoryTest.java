@@ -1,4 +1,4 @@
-package team1.issuetracker.label;
+package team1.issuetracker.unit.label;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -7,6 +7,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
+import team1.issuetracker.label.Label;
+import team1.issuetracker.label.LabelRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
