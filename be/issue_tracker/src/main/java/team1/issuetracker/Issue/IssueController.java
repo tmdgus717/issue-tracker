@@ -64,19 +64,21 @@ public class IssueController {
     }
 
     @PostMapping
-    public void createIssue(@RequestBody IssueMakeRequest issueMakeRequest) {
-        log.debug("Create issue");
+    public IssueShowResponse createIssue(@RequestBody IssueMakeRequest issueMakeRequest) {
+        log.debug("Create issue with \n{}" , issueMakeRequest);
         Issue issue = Issue.from(issueMakeRequest, "test1");
         Issue saved = issueService.createIssue(issue);
 
         String comment = issueMakeRequest.getComment();
         commentService.addComment(saved.getId(), "test1", new CommentPostRequest(comment));
+
+        return showIssue(saved.getId());
     }
 
     @PostMapping("/{id}/close")
-    public void closeIssue(@PathVariable("id") Long id) throws NoSuchElementException, IllegalStateException {
+    public long closeIssue(@PathVariable("id") Long id) throws NoSuchElementException, IllegalStateException {
         log.debug("Close issue.{}", id);
-        issueService.closeIssue(id);
+        return issueService.closeIssue(id);
     }
 
     @PostMapping("/multi/close")
