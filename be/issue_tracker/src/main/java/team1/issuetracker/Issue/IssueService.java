@@ -1,13 +1,15 @@
 package team1.issuetracker.Issue;
 
-import static team1.issuetracker.Issue.IssueStatus.CLOSE;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.relational.core.conversion.DbActionExecutionException;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.StringJoiner;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+
+import static team1.issuetracker.Issue.IssueStatus.CLOSE;
 
 @Service
 public class IssueService {
@@ -28,15 +30,24 @@ public class IssueService {
     }
 
     public Issue createIssue(Issue issue) {
-        return issueRepository.save(issue);
+        Issue saved;
+
+        try {
+            saved = issueRepository.save(issue);
+        } catch (DbActionExecutionException notExistsLabel){
+            throw new IllegalArgumentException("유효하지 않은 이슈 등록 요청 : 유저, 라벨, 마일스톤을 다시 확인하세요.");
+        }
+
+        return saved;
     }
 
-    public void closeIssue(Long id) throws NoSuchElementException {
+    public long closeIssue(Long id) throws NoSuchElementException {
         Issue issue = getIssueById(id);
         if (issue.getStatus() == CLOSE) throw new IllegalStateException(id + "번 이슈는 이미 닫힌 상태입니다!");
 
         issue.setStatus(CLOSE);
         issueRepository.save(issue);
+        return id;
     }
 
     public void deleteIssue(Long id) throws NoSuchElementException {
