@@ -7,7 +7,7 @@ public record LabelListResponse(Long id, String name, String description, String
         return new LabelListResponse(
                 label.getId(),
                 label.getName(),
-                label.getColor(),
-                label.getDescription());
+                label.getDescription(),
+                label.getColor());
     }
 }

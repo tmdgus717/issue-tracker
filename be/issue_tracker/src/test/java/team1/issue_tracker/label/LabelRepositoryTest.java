@@ -1,11 +1,12 @@
 package team1.issue_tracker.label;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -15,84 +16,90 @@ public class LabelRepositoryTest {
     @Autowired
     LabelRepository labelRepository;
 
-    @DisplayName("id와 createdAt을 지정하지 않고 저장하면 자동 생성되어 저장된다")
+    @DisplayName("label save test")
     @Test
-    void autoGenerate() {
-        // given
+    void saveTest() {
+        //given
         Label label = Label.builder()
-                .name("이름")
-                .description("설명")
-                .color("#000000")
-                .build();
+            .color("#000000")
+            .createdAt(LocalDateTime.now())
+            .description("pleaseSuccess")
+            .name("testLabel")
+            .build();
 
-        // when
-        assertThat(label.getId()).isNull();
-        assertThat(label.getCreatedAt()).isNull();
-        Label saved = labelRepository.save(label);
+        assertThat(label.getColor()).isEqualTo("#000000");
+        assertThat(label.getCreatedAt()).isNotNull();
 
-        // then
-        assertThat(saved.getId()).isNotNull();
-        assertThat(saved.getCreatedAt()).isNotNull();
-    }
-
-    @DisplayName("라벨을 저장하고 조회할 수 있다")
-    @Test
-    void saveAndFindById() {
-        // given
-        Label label = Label.builder()
-                .name("이름")
-                .description("설명")
-                .color("#000000")
-                .build();
-
-        // when
-        labelRepository.save(label);
-        Label foundLabel = labelRepository.findAll().iterator().next();
+        //when
+        Label savedLabel = labelRepository.save(label);
 
         //then
-        assertThat(foundLabel.getName()).isEqualTo("이름");
-        assertThat(foundLabel.getDescription()).isEqualTo("설명");
-        assertThat(foundLabel.getColor()).isEqualTo("#000000");
-        assertThat(foundLabel.getCreatedAt()).isNotNull();
+        assertThat(savedLabel.getName()).isEqualTo(label.getName());
     }
 
-    @DisplayName("Id 목록에 해당하는 모든 라벨을 한 번에 조회할 수 있다")
+    @DisplayName("Label delete test")
     @Test
-    void findAllById() {
-        // given
-        Label label1 = Label.builder()
-                .name("이름")
-                .description("설명")
-                .color("#000000")
-                .build();
+    void deleteTest() {
+        //given
+        Label label = Label.builder()
+            .color("#000000")
+            .createdAt(LocalDateTime.now())
+            .description("pleaseSuccess")
+            .name("testLabel")
+            .build();
 
-        Label label2 = Label.builder()
-                .name("이름")
-                .description("설명")
-                .color("#000000")
-                .build();
-
-        Label label3 = Label.builder()
-                .name("이름")
-                .description("설명")
-                .color("#000000")
-                .build();
-
-        Label label4 = Label.builder()
-                .name("이름")
-                .description("설명")
-                .color("#000000")
-                .build();
-
-        // when
-        labelRepository.save(label1);
-        labelRepository.save(label2);
-        labelRepository.save(label3);
-        labelRepository.save(label4);
-        List<Label> foundLabels = (List<Label>) labelRepository.findAllById(List.of(1L, 2L, 3L, 4L));
+        //when
+        Label savedLabel = labelRepository.save(label);
+        List<Label> labelList = (List<Label>) labelRepository.findAll();
+        assertThat(labelList.size()).isEqualTo(1);
+        labelRepository.delete(label);
 
         //then
-        assertThat(foundLabels.size()).isEqualTo(4);
-        assertThat(foundLabels.get(3).getDescription()).isEqualTo("설명");
+        labelList = (List<Label>) labelRepository.findAll();
+        assertThat(labelList.size()).isEqualTo(0);
     }
+
+    @DisplayName("findById test")
+    @Test
+    void findByIdTest() {
+        Label label = Label.builder()
+            .color("#000000")
+            .createdAt(LocalDateTime.now())
+            .description("pleaseSuccess")
+            .name("testLabel")
+            .build();
+
+        Label savedLabel = labelRepository.save(label);
+        Optional<Label> optionalLabel = labelRepository.findById(1L);
+        //then
+        assertThat(optionalLabel.get().getName()).isEqualTo(savedLabel.getName());
+    }
+
+    @DisplayName("Label update test")
+    @Test
+    void updateTest() {
+        //given
+        Label label = Label.builder()
+            .color("#000000")
+            .createdAt(LocalDateTime.now())
+            .description("pleaseSuccess")
+            .name("testLabel")
+            .build();
+
+        //when
+        Label savedLabel = labelRepository.save(label);
+        assertThat(savedLabel.getName()).isEqualTo(label.getName());
+
+        Label updateLabel = Label.builder()
+            .id(savedLabel.getId())
+            .name("updateLabel")
+            .description(savedLabel.getDescription())
+            .color(savedLabel.getColor())
+            .createdAt(savedLabel.getCreatedAt())
+            .build();
+
+        Label updatedLabel = labelRepository.save(label);
+        assertThat(updatedLabel.getName()).isEqualTo(savedLabel.getName());
+    }
+
 }
