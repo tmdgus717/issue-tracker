@@ -7,6 +7,7 @@ import java.util.Set;
 import org.springframework.stereotype.Service;
 import team1.issuetracker.Issue.Issue;
 import team1.issuetracker.Issue.ref.AssigneeRef;
+import team1.issuetracker.user.dto.LoginInfo;
 import team1.issuetracker.user.dto.RegisterInfo;
 import team1.issuetracker.user.dto.UserInfoResponse;
 
@@ -45,10 +46,8 @@ public class UserService {
     }
 
     public UserInfoResponse getUserInfo(String id) {
-        Optional<User> byId = userRepository.findById(id);
-        byId.orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원 ID 입니다"));
-
-        return UserInfoResponse.of(byId.get());
+        User userById = getUserById(id);
+        return UserInfoResponse.of(userById);
     }
 
     public List<String> getAssigneesAtIssue(Issue issue) {
@@ -56,5 +55,18 @@ public class UserService {
         return issueAssignees.stream()
                 .map(AssigneeRef::getUserId)
                 .map(this::getNameById).toList();
+    }
+
+    public boolean authentication(LoginInfo loginInfo) throws NoSuchElementException{
+        User tryingUser = getUserById(loginInfo.id());
+
+        return tryingUser.getPassword().equals(loginInfo.password());
+    }
+
+    private User getUserById(String id){
+        Optional<User> byId = userRepository.findById(id);
+        byId.orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원 ID 입니다"));
+
+        return byId.get();
     }
 }
