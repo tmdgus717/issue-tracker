@@ -2,6 +2,7 @@
 /src/main/resources/db-config.yml
 /src/main/resources/test-db-config.yml
 /src/main/resources/jwt.yml
+/src/test/resources/jwt.yml
 
 ### build ###
 HELP.md

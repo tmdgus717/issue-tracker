@@ -70,7 +70,7 @@ public class IssueController {
         Issue saved = issueService.createIssue(issue);
 
         String comment = issueMakeRequest.getComment();
-        commentService.addComment(saved.getId(), "test1", new CommentPostRequest(comment));
+        commentService.addComment(saved.getId(), "test1", new CommentPostRequest(saved.getId(),comment));
 
         return showIssue(saved.getId());
     }
