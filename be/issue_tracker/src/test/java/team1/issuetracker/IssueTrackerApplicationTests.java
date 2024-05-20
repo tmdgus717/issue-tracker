@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import team1.issuetracker.Issue.IssueRepository;
+import team1.issuetracker.domain.Issue.IssueRepository;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 

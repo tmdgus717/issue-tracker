@@ -9,7 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-import team1.issuetracker.Issue.dto.IssueMakeRequest;
+import team1.issuetracker.domain.Issue.dto.IssueMakeRequest;
 
 import java.util.List;
 
