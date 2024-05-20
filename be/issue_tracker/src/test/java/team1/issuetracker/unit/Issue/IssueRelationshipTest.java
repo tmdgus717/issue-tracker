@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
 import org.springframework.transaction.annotation.Transactional;
-import team1.issuetracker.Issue.Issue;
-import team1.issuetracker.Issue.IssueRepository;
-import team1.issuetracker.comment.CommentRepository;
-import team1.issuetracker.user.UserRepository;
+import team1.issuetracker.domain.Issue.Issue;
+import team1.issuetracker.domain.Issue.IssueRepository;
+import team1.issuetracker.domain.comment.CommentRepository;
+import team1.issuetracker.domain.user.UserRepository;
 
 import javax.sql.DataSource;
 import java.util.List;

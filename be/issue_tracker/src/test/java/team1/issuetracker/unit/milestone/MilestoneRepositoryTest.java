@@ -8,8 +8,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
-import team1.issuetracker.milestone.Milestone;
-import team1.issuetracker.milestone.MilestoneRepository;
+import team1.issuetracker.domain.milestone.Milestone;
+import team1.issuetracker.domain.milestone.MilestoneRepository;
 
 @DataJdbcTest
 class MilestoneRepositoryTest {
