@@ -24,10 +24,10 @@ public class JwtUtil {
         SecretKey key = getSigningKey();
         System.out.println(username);
         return Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours
-                .signWith(key, SignatureAlgorithm.HS256)
+                .subject(username)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours
+                .signWith(key)
                 .compact();
     }
 
@@ -38,15 +38,13 @@ public class JwtUtil {
             SecretKey key = getSigningKey();
 
             Claims claims = Jwts.parser()
-                    .setSigningKey(key)
+                    .verifyWith(key)
                     .build()
-                    .parseClaimsJws(token)
-                    .getBody();
+                    .parseSignedClaims(token)
+                    .getPayload();
 
-            System.out.println("성공!");
             return claims.getSubject();
         } catch (Exception e) {
-            System.out.println("실패..");
             return null;
         }
     }
