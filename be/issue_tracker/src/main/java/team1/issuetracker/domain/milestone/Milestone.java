@@ -27,6 +27,7 @@ public class Milestone {
     @MappedCollection(idColumn = "MILESTONE_ID")
     private Set<Issue> issues;
     private Date deadline;
+    private String userId;
     @CreatedDate
     private LocalDateTime createdAt;
 
