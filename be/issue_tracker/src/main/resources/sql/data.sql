@@ -5,10 +5,10 @@ values ('test1', 'test123', '테스트유저1'),
        ('test3', 'test123', '테스트유저3');
 
 /* MILESTONE */
-insert into MILESTONE (name, description, deadline)
-VALUES ('feat_1', '피쳐원', '2024-05-18 00:00:00'),
-       ('feat_2', '피쳐투', '2024-05-18 00:00:00'),
-       ('feat_3', '피쳐쓰리', '2024-05-18 00:00:00');
+insert into MILESTONE (name, description, deadline, user_id)
+VALUES ('feat_1', '피쳐원', '2024-05-18 00:00:00', 'test1'),
+       ('feat_2', '피쳐투', '2024-05-18 00:00:00', 'test1'),
+       ('feat_3', '피쳐쓰리', '2024-05-18 00:00:00', 'test1');
 
 /* ISSUE */
 insert into ISSUE (user_id, title, milestone_id)
@@ -39,18 +39,18 @@ VALUES ('test2', 1, '내용'),
        ('test2', 6, '내용44'),
        ('test2', 7, '내용44'),
        ('test2', 8,
-        '내용87888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888'),
+        '내용8788888'),
        ('test2', 9, '내용44'),
        ('test2', 10, '내용44');
 
 
 /* LABEL*/
-insert into LABEL (name, description, color)
-VALUES ('todo', '오늘 할 일', '#C3FF93'),
-       ('일2', '내일 할 일', '#FFDB5C'),
-       ('todo3', '내일 할 일', '#FFAF61'),
-       ('todo4', '내일 할 일', '#FF70AB'),
-       ('todo5', '내일 할 일', '#CAF4FF');
+insert into LABEL (name, description, color, user_id)
+VALUES ('todo', '오늘 할 일', '#C3FF93', 'test1'),
+       ('일2', '내일 할 일', '#FFDB5C', 'test1'),
+       ('todo3', '내일 할 일', '#FFAF61', 'test1'),
+       ('todo4', '내일 할 일', '#FF70AB', 'test1'),
+       ('todo5', '내일 할 일', '#CAF4FF', 'test1');
 
 
 /* ISSUE_LABEL */
@@ -64,7 +64,7 @@ VALUES (1, 1),
        (4, 4),
        (4, 5),
        (10, 2),
-       (1,3);
+       (1, 3);
 
 insert into ISSUE_HAS_ASSIGNEE(issue_id, assignee_id)
 VALUES (1, 'test3'),
@@ -73,4 +73,4 @@ VALUES (1, 'test3'),
        (5, 'test1');
 
 insert into COMMENT_FILE(comment_id, file_url)
-VALUES (1,'adsfsfs');
+VALUES (1, 'adsfsfs');

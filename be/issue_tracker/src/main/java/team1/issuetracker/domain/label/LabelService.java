@@ -24,8 +24,8 @@ public class LabelService {
         this.labelRepository = labelRepository;
     }
 
-    public void saveLabel(LabelMakeRequest labelMakeRequest) {
-        Label label = Label.of(labelMakeRequest);
+    public void saveLabel(LabelMakeRequest labelMakeRequest, String userId) {
+        Label label = Label.of(labelMakeRequest, userId);
         labelRepository.save(label);
     }
 

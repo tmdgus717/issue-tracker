@@ -16,7 +16,9 @@ create table MILESTONE
     name        varchar(255) unique not null,
     description text,
     deadline    date,
-    created_at  timestamp default current_timestamp
+    user_id     varchar(255)        not null,
+    created_at  timestamp default current_timestamp,
+    foreign key (user_id) references USERS (id) ON DELETE CASCADE
 );
 
 create table LABEL
@@ -25,7 +27,9 @@ create table LABEL
     name        varchar(255) unique not null,
     description text,
     color       varchar(7)          not null default '#ffffff',
-    created_at  timestamp                    default current_timestamp
+    user_id     varchar(255)        not null,
+    created_at  timestamp                    default current_timestamp,
+    foreign key (user_id) references USERS (id) ON DELETE CASCADE
 );
 
 create table ISSUE
