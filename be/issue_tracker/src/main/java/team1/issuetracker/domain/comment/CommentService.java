@@ -7,6 +7,8 @@ import team1.issuetracker.domain.Issue.IssueService;
 import team1.issuetracker.domain.comment.dto.CommentListResponse;
 import team1.issuetracker.domain.comment.dto.CommentPostRequest;
 import team1.issuetracker.domain.user.UserService;
+import team1.issuetracker.domain.user.auth.Authorizable;
+import team1.issuetracker.domain.user.auth.AuthorizeException;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -14,7 +16,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 @Service
-public class CommentService {
+public class CommentService implements Authorizable<Comment, Long> {
     private final CommentRepository commentRepository;
     private final IssueService issueService;
     private final UserService userService;
@@ -70,25 +72,28 @@ public class CommentService {
 
     public String getFirstCommentTextAtIssue(Issue issue) {
         Comment firstAtIssue = commentRepository.findFirstAtIssue(issue.getId());
-        if(firstAtIssue == null) return null;
+        if (firstAtIssue == null) return null;
 
         return firstAtIssue.getContent();
     }
 
-
-    public boolean canModify(long id, String userId) throws NoSuchElementException {
-        return getCommentById(id).getUserId().equals(userId);
-    }
-
-    public Comment modifyComment(long id, String userId, CommentPostRequest commentInfo) throws NoSuchElementException {
-        Comment origin = getCommentById(id);
+    public Comment modifyComment(long id, String userId, CommentPostRequest commentInfo) throws NoSuchElementException, AuthorizeException {
+        Comment origin = authorize(id, userId);
         Comment newComment = Comment.makeOnlyComment(origin.getIssueId(), userId, commentInfo.content());
         commentRepository.save(newComment);
         return getCommentById(id);
     }
 
-    public void deleteComment(Long commentId) throws NoSuchElementException {
-        commentRepository.delete(getCommentById(commentId));
+    public void deleteComment(Long commentId, String userId) throws NoSuchElementException, AuthorizeException {
+        commentRepository.delete(authorize(commentId, userId));
+    }
+
+    @Override
+    public Comment authorize(Long commentId, String userId) throws NoSuchElementException{
+        Comment comment = getCommentById(commentId);
+        if(!comment.getUserId().equals(userId)) throw new AuthorizeException(commentId + "번 댓글에 대한 권한이 없습니다");
+
+        return comment;
     }
 
     private Comment getCommentById(long commentId) {
