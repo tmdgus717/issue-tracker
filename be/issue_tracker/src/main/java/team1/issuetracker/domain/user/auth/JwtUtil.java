@@ -21,7 +21,6 @@ public class JwtUtil {
 
     public String generateToken(String username) {
         SecretKey key = getSigningKey();
-        System.out.println(username);
         return Jwts.builder()
                 .subject(username)
                 .issuedAt(new Date())
@@ -31,8 +30,6 @@ public class JwtUtil {
     }
 
     public String validateToken(String token) {
-        System.out.println(token);
-
         try {
             SecretKey key = getSigningKey();
 
