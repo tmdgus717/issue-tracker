@@ -28,9 +28,9 @@ public class LabelController {
     }
 
     @PostMapping
-    public void createLabel(@RequestBody LabelMakeRequest labelMakeRequest, HttpServletRequest httpServletRequest){
+    public LabelListResponse createLabel(@RequestBody LabelMakeRequest labelMakeRequest, HttpServletRequest httpServletRequest){
         String userId = authenticator.authenticate(httpServletRequest);
-        labelService.saveLabel(labelMakeRequest, userId);
+        return LabelListResponse.of(labelService.saveLabel(labelMakeRequest, userId));
     }
 
     @PatchMapping("/{id}")
