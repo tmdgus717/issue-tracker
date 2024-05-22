@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import team1.issuetracker.domain.label.LabelService;
 import team1.issuetracker.domain.label.dto.LabelListResponse;
 import team1.issuetracker.domain.milestone.MilestoneService;
-import team1.issuetracker.domain.milestone.dto.MilestoneInfo;
+import team1.issuetracker.domain.milestone.dto.MilestoneShowResponse;
 import team1.issuetracker.domain.user.UserService;
 import team1.issuetracker.domain.user.dto.AssigneeInfo;
 
@@ -39,7 +39,7 @@ public class SelectController {
     }
 
     @GetMapping("/milestone")
-    public List<MilestoneInfo> getMilestones() {
+    public List<MilestoneShowResponse> getMilestones() {
         return milestoneService.getMilestoneInfo();
     }
 }

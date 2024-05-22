@@ -8,10 +8,9 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import team1.issuetracker.domain.Issue.Issue;
-import team1.issuetracker.domain.milestone.dto.MilestoneInfo;
+import team1.issuetracker.domain.milestone.dto.MilestoneListResponse;
 import team1.issuetracker.domain.milestone.dto.MilestoneMakeRequest;
 import team1.issuetracker.domain.milestone.dto.MilestoneShowResponse;
-import team1.issuetracker.domain.milestone.dto.MilestoneListResponse;
 import team1.issuetracker.domain.user.auth.Authorizable;
 import team1.issuetracker.domain.user.auth.AuthorizeException;
 
@@ -30,9 +29,9 @@ public class MilestoneService implements Authorizable<Milestone, Long> {
         return milestones.stream().map(MilestoneListResponse::of).toList();
     }
 
-    public List<MilestoneInfo> getMilestoneInfo() {
+    public List<MilestoneShowResponse> getMilestoneInfo() {
         List<Milestone> milestones = (List<Milestone>) milestoneRepository.findAll();
-        return milestones.stream().map(milestone -> new MilestoneInfo(milestone.getId(), milestone.getName())).collect(
+        return milestones.stream().map(milestone -> new MilestoneShowResponse(milestone.getId(), milestone.getName())).collect(
                 Collectors.toList());
     }
 
