@@ -37,10 +37,10 @@ public class MilestoneController {
 
     @Authenticate
     @PatchMapping("/{id}")
-    public Milestone updateMilestone(@RequestBody MilestoneMakeRequest milestoneMakeRequest,
+    public MilestoneListResponse updateMilestone(@RequestBody MilestoneMakeRequest milestoneMakeRequest,
                                      @PathVariable("id") Long id, @AuthenticatedUserId String userId)
             throws IllegalArgumentException {
-        return milestoneService.updateMilestone(milestoneMakeRequest, id, userId);
+        return MilestoneListResponse.of(milestoneService.updateMilestone(milestoneMakeRequest, id, userId));
     }
 
     @Authenticate
