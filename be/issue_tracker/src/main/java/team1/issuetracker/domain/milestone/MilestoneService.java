@@ -10,7 +10,7 @@ import team1.issuetracker.domain.milestone.dto.MilestoneListResponse;
 import team1.issuetracker.domain.milestone.dto.MilestoneMakeRequest;
 import team1.issuetracker.domain.milestone.dto.MilestoneShowResponse;
 import team1.issuetracker.domain.user.auth.Authorizable;
-import team1.issuetracker.domain.user.auth.AuthorizeException;
+import team1.issuetracker.domain.user.auth.exception.AuthorizeException;
 
 @Service
 public class MilestoneService implements Authorizable<Milestone, Long> {
@@ -58,11 +58,11 @@ public class MilestoneService implements Authorizable<Milestone, Long> {
         }
     }
 
-    public void deleteMilestone(Long id, String userId) {
+    public void deleteMilestone(Long id, String userId) throws AuthorizeException{
         milestoneRepository.delete(authorize(id, userId));
     }
 
-    public Milestone updateMilestone(MilestoneMakeRequest milestoneMakeRequest, Long id, String userId) {
+    public Milestone updateMilestone(MilestoneMakeRequest milestoneMakeRequest, Long id, String userId) throws AuthorizeException{
         Milestone origin = authorize(id, userId);
         String name = milestoneMakeRequest.name();
         String description = milestoneMakeRequest.description();
@@ -78,7 +78,11 @@ public class MilestoneService implements Authorizable<Milestone, Long> {
                 .createdAt(origin.getCreatedAt())
                 .build();
 
-        milestoneRepository.save(updateMilestone);
+        try {
+            milestoneRepository.save(updateMilestone);
+        }catch (DbActionExecutionException failToUpdate){
+            throw new IllegalArgumentException("수정 실패. 이름이 중복되었는지 확인하세요");
+        }
 
         return getMilestoneById(id);
     }

@@ -9,7 +9,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.StringJoiner;
 import team1.issuetracker.domain.user.auth.Authorizable;
-import team1.issuetracker.domain.user.auth.AuthorizeException;
+import team1.issuetracker.domain.user.auth.exception.AuthorizeException;
 
 import static team1.issuetracker.domain.Issue.IssueStatus.CLOSE;
 

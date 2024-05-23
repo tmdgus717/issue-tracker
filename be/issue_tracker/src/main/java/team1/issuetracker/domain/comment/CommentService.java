@@ -8,7 +8,7 @@ import team1.issuetracker.domain.comment.dto.CommentListResponse;
 import team1.issuetracker.domain.comment.dto.CommentPostRequest;
 import team1.issuetracker.domain.user.UserService;
 import team1.issuetracker.domain.user.auth.Authorizable;
-import team1.issuetracker.domain.user.auth.AuthorizeException;
+import team1.issuetracker.domain.user.auth.exception.AuthorizeException;
 
 import java.util.List;
 import java.util.NoSuchElementException;

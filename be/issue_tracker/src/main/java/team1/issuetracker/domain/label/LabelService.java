@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import team1.issuetracker.domain.Issue.Issue;
 import team1.issuetracker.domain.Issue.ref.LabelRef;
-import team1.issuetracker.domain.comment.Comment;
 import team1.issuetracker.domain.label.dto.LabelListResponse;
 
 import java.util.List;
@@ -14,7 +13,7 @@ import java.util.Set;
 
 import team1.issuetracker.domain.label.dto.LabelMakeRequest;
 import team1.issuetracker.domain.user.auth.Authorizable;
-import team1.issuetracker.domain.user.auth.AuthorizeException;
+import team1.issuetracker.domain.user.auth.exception.AuthorizeException;
 
 
 @Service

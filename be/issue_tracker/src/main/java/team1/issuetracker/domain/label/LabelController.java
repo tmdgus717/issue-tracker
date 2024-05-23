@@ -33,8 +33,8 @@ public class LabelController {
 
     @Authenticate
     @PatchMapping("/{id}")
-    public Label updateLabel(@PathVariable long id, @RequestBody LabelMakeRequest labelMakeRequest, @AuthenticatedUserId String userId){
-        return labelService.updateLabel(id, labelMakeRequest, userId);
+    public LabelListResponse updateLabel(@PathVariable long id, @RequestBody LabelMakeRequest labelMakeRequest, @AuthenticatedUserId String userId){
+        return LabelListResponse.of(labelService.updateLabel(id, labelMakeRequest, userId));
     }
 
     @Authenticate

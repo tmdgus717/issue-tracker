@@ -25,19 +25,16 @@ public class AuthenticatorAspect {
 
     @Around("@annotation(team1.issuetracker.domain.user.auth.annotation.Authenticate)")
     public Object authenticate(ProceedingJoinPoint joinPoint) throws Throwable {
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        Method method = signature.getMethod();
+        Object[] args = joinPoint.getArgs();
+
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
 
         String userId = authenticator.authenticate(request);
-
-        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        Method method = signature.getMethod();
-
-        Object[] args = joinPoint.getArgs();
-
         int index = findIndexOfAnnotation(method.getParameterAnnotations());
         args[index] = userId;
-
         return joinPoint.proceed(args);
     }
 

@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.*;
 import team1.issuetracker.domain.comment.dto.CommentPostRequest;
 import team1.issuetracker.domain.user.auth.annotation.Authenticate;
 import team1.issuetracker.domain.user.auth.annotation.AuthenticatedUserId;
-import team1.issuetracker.domain.user.auth.AuthorizeException;
+import team1.issuetracker.domain.user.auth.exception.AuthorizeException;
 
 import java.util.NoSuchElementException;
 

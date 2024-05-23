@@ -1,4 +1,4 @@
-package team1.issuetracker.domain.user.auth;
+package team1.issuetracker.domain.user.auth.exception;
 
 public class AuthorizeException extends RuntimeException {
 
