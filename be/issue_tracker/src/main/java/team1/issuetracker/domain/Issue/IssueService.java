@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.StringJoiner;
+
+import team1.issuetracker.domain.Issue.dto.IssueUpdateRequest;
 import team1.issuetracker.domain.user.auth.Authorizable;
 import team1.issuetracker.domain.user.auth.exception.AuthorizeException;
 
@@ -41,6 +43,11 @@ public class IssueService implements Authorizable<Issue, Long> {
         }
 
         return saved;
+    }
+
+    public Issue updateIssue(Long issueId, IssueUpdateRequest updateRequest, String userId) {
+        Issue origin = authorize(issueId, userId);
+        return issueRepository.save(updateRequest.toIssue(origin));
     }
 
     public long closeIssue(Long id, String userId) throws NoSuchElementException {

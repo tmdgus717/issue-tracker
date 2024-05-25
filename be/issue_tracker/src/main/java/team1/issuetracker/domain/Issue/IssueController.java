@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import team1.issuetracker.domain.Issue.dto.IssueListResponse;
 import team1.issuetracker.domain.Issue.dto.IssueMakeRequest;
 import team1.issuetracker.domain.Issue.dto.IssueShowResponse;
+import team1.issuetracker.domain.Issue.dto.IssueUpdateRequest;
 import team1.issuetracker.domain.comment.CommentService;
 import team1.issuetracker.domain.comment.dto.CommentPostRequest;
 import team1.issuetracker.domain.label.LabelService;
@@ -43,13 +44,7 @@ public class IssueController {
         Issue issue = issueService.showIssue(id);
         String authorName = userService.getNameById(issue.getUserId());
 
-        return IssueShowResponse.of(
-                issue,
-                authorName,
-                userService.getAssigneeNameAtIssue(issue),
-                labelService.getLabelsAyIssue(issue),
-                milestoneService.getMilestoneAtIssue(issue),
-                commentService.getCommentsAtIssue(issue.getId()));
+        return getDetailOf(issue, authorName);
     }
 
     @GetMapping("/list")
@@ -57,33 +52,38 @@ public class IssueController {
         log.debug("Show Open issue list");
         List<Issue> openIssues = issueService.getOpenIssues();
 
-        return openIssues.stream().map(issue -> IssueListResponse.of(
-                        issue,
-                        commentService.getFirstCommentTextAtIssue(issue),
-                        labelService.getLabelsAyIssue(issue),
-                        milestoneService.getMilestoneAtIssue(issue)))
-                .toList();
+        return openIssues.stream().map(this::getPreviewOf).toList();
     }
 
     @Authenticate
     @PostMapping
-    public IssueShowResponse createIssue(@RequestBody IssueMakeRequest issueMakeRequest, @AuthenticatedUserId String userId) {
-        log.debug("Create issue with \n{}" , issueMakeRequest);
+    public IssueListResponse createIssue(@RequestBody IssueMakeRequest issueMakeRequest, @AuthenticatedUserId String userId) {
+        log.debug("Create issue with \n{}", issueMakeRequest);
 
         Issue issue = Issue.from(issueMakeRequest, userId);
         Issue saved = issueService.createIssue(issue);
 
         String comment = issueMakeRequest.getComment();
-        commentService.addComment(saved.getId(), userId, new CommentPostRequest(saved.getId(),comment));
+        commentService.addComment(saved.getId(), userId, new CommentPostRequest(saved.getId(), comment));
 
-        return showIssue(saved.getId());
+        return getPreviewOf(issue);
+    }
+
+    @Authenticate
+    @PatchMapping("/{id}")
+    public IssueShowResponse updateIssue(@PathVariable Long id, @RequestBody IssueUpdateRequest issueUpdateRequest, @AuthenticatedUserId String userId) {
+        log.debug("Update issue with \n{}", issueUpdateRequest);
+
+        Issue updated = issueService.updateIssue(id, issueUpdateRequest, userId);
+
+        return showIssue(updated.getId());
     }
 
     @Authenticate
     @PostMapping("/{id}/close")
     public long closeIssue(@PathVariable("id") Long id, @AuthenticatedUserId String userId) throws NoSuchElementException, IllegalStateException {
         log.debug("Close issue.{}", id);
-        return issueService.closeIssue(id,userId);
+        return issueService.closeIssue(id, userId);
     }
 
     @Authenticate
@@ -98,5 +98,23 @@ public class IssueController {
     public void deleteIssue(@PathVariable("id") Long id, @AuthenticatedUserId String userId) {
         log.debug("Delete issue.{}", id);
         issueService.deleteIssue(id, userId);
+    }
+
+    private IssueListResponse getPreviewOf(Issue issue) {
+        return IssueListResponse.of(
+                issue,
+                commentService.getFirstCommentTextAtIssue(issue),
+                labelService.getLabelsAyIssue(issue),
+                milestoneService.getMilestoneAtIssue(issue));
+    }
+
+    private IssueShowResponse getDetailOf(Issue issue, String authorName) {
+        return IssueShowResponse.of(
+                issue,
+                authorName,
+                userService.getAssigneeNameAtIssue(issue),
+                labelService.getLabelsAyIssue(issue),
+                milestoneService.getMilestoneAtIssue(issue),
+                commentService.getCommentsAtIssue(issue.getId()));
     }
 }
