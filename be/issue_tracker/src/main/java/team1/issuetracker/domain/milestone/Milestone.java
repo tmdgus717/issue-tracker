@@ -1,5 +1,6 @@
 package team1.issuetracker.domain.milestone;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Set;
@@ -26,7 +27,7 @@ public class Milestone {
     private String description;
     @MappedCollection(idColumn = "MILESTONE_ID")
     private Set<Issue> issues;
-    private Date deadline;
+    private LocalDate deadline;
     private String userId;
     @CreatedDate
     private LocalDateTime createdAt;

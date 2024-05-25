@@ -1,5 +1,6 @@
 package team1.issuetracker.domain.milestone;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ public class MilestoneService implements Authorizable<Milestone, Long> {
         return new MilestoneShowResponse(milestoneId, milestone.getName());
     }
 
-    public Milestone createMilestone(String name, String description, Date deadline, String userId) {
+    public Milestone createMilestone(String name, String description, LocalDate deadline, String userId) {
         Milestone milestone = Milestone.builder()
                 .name(name)
                 .description(description)
@@ -66,7 +67,7 @@ public class MilestoneService implements Authorizable<Milestone, Long> {
         Milestone origin = authorize(id, userId);
         String name = milestoneMakeRequest.name();
         String description = milestoneMakeRequest.description();
-        Date deadline = milestoneMakeRequest.deadline();
+        LocalDate deadline = milestoneMakeRequest.deadline();
 
         Milestone updateMilestone = Milestone.builder()
                 .id(origin.getId())

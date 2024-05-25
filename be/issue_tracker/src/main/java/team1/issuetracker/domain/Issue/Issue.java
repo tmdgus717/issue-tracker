@@ -52,27 +52,4 @@ public class Issue {
                 .status(IssueStatus.OPEN)
                 .build();
     }
-
-    public static Issue from(IssueMakeRequest request, String userId) {
-        String title = request.getTitle();
-        List<String> assigneeIds = request.getAssigneeIds();
-        List<Long> labelIds = request.getLabelIds();
-        Long milestoneId = request.getMilestoneId();
-
-        Set<AssigneeRef> issueAssignees = assigneeIds.stream()
-                .map(assigneeId -> AssigneeRef.builder().userId(assigneeId).build())
-                .collect(Collectors.toSet());
-
-        Set<LabelRef> issueHasLabel = labelIds.stream().map(labelId -> LabelRef.builder().labelId(labelId).build())
-                .collect(Collectors.toSet());
-
-        return Issue.builder()
-                .userId(userId)
-                .title(title)
-                .issueHasLabel(issueHasLabel)
-                .issueAssignees(issueAssignees)
-                .milestoneId(milestoneId)
-                .status(IssueStatus.OPEN)
-                .build();
-    }
 }

@@ -60,7 +60,7 @@ public class IssueController {
     public IssueListResponse createIssue(@RequestBody IssueMakeRequest issueMakeRequest, @AuthenticatedUserId String userId) {
         log.debug("Create issue with \n{}", issueMakeRequest);
 
-        Issue issue = Issue.from(issueMakeRequest, userId);
+        Issue issue = issueMakeRequest.toIssue(userId);
         Issue saved = issueService.createIssue(issue);
 
         String comment = issueMakeRequest.getComment();
