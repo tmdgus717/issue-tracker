@@ -1,1 +1,2 @@
 INSERT INTO USERS (ID, NAME) VALUES ( 'test', '테스터' );
+INSERT INTO USERS (ID, NAME) VALUES ( 'test1', '테스터1' );
